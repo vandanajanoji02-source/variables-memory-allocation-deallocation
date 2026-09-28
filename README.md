@@ -2,7 +2,7 @@
 
 This guide explains what variables are used for, how they relate to memory, how long names and objects remain available, and how Node.js and Python manage memory.
 
-## What Is a Variable Used For?
+## what are the uses of variables in node js and python ?
 
 A variable gives a value a name so a program can use it later. Variables can hold or refer to input, results, settings, objects, and temporary data.
 
@@ -24,7 +24,7 @@ score = 10
 score = score + 5
 ```
 
-## How Variables Relate to Memory
+## how memory assosicated with variables.
 
 In both languages, a variable name is best understood as a reference to a value or object. Assigning one variable to another usually creates another reference to the same object, rather than a copy.
 
@@ -50,7 +50,7 @@ print(first["color"])  # green: both names refer to the same object.
 
 The exact representation of names and values in memory is an implementation detail. In particular, runtimes can optimize how they store or represent values, so it is better not to assume every variable occupies a particular kind of memory location.
 
-## Scope, Lifetime, and “Expiry”
+## what is the time period or validity or expaiery or memory delestion?
 
 There is no general expiry timer for a variable or object. **Scope** describes where a name can be used; **lifetime** describes how long the value or object remains available.
 
@@ -93,7 +93,7 @@ print(next_count())  # 2
 
 In both examples, the outer function has returned, but the returned function still refers to `count`.
 
-## Memory Allocation and Deallocation in Node.js
+## how does the mwmoery allocation works in node js for variables?
 
 Node.js runs JavaScript using the V8 engine. As the program runs, V8 creates bindings and allocates memory for values and objects. The specific representation and location can vary due to engine implementation and optimization.
 
@@ -106,9 +106,11 @@ item = null; // Removes this reference; it does not force immediate collection.
 
 If there are no other references to the object, it becomes eligible for garbage collection. Collection happens automatically and is not guaranteed to happen at a particular time. Even after collection, the runtime may keep the freed memory for reuse instead of immediately returning it to the operating system.
 
-## Memory Allocation and Deallocation in Python
+## what does the momory allocation works in python for variables
 
 Python creates objects as the program runs and manages their memory automatically. The details depend on the Python implementation. In the commonly used CPython implementation, objects are generally reclaimed when their reference count reaches zero. Python also has a cyclic garbage collector to find unreachable groups of objects that refer to one another.
+
+## what does the memory deallocation works in python for variables
 
 `del` removes a name binding; it does not necessarily destroy the object:
 
