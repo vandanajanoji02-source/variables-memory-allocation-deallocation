@@ -1,0 +1,252 @@
+# Python Variables, Objects, and Memory: 23 Questions
+
+This guide answers the questions about Python variables, built-in types, object references, and memory management. Memory-management details can vary by Python implementation; notes about reference counting specifically describe CPython.
+
+## 1. What is a variable in Python?
+
+A variable is a name bound to an object. Assignment binds a name; it does not put a value into a box owned by the name.
+
+```python
+x = 10
+```
+
+Conceptually, `x` refers to the integer object `10`.
+
+## 2. Is everything in Python an object?
+
+Python's values, including integers, strings, floats, lists, and functions, are objects. An object has an identity, a type, and a value.
+
+```python
+x = 10
+print(id(x))    # Identity
+print(type(x))  # <class 'int'>
+print(x)        # Value: 10
+```
+
+`id()` gives an identity unique among objects that exist at the same time. It is not guaranteed to be a memory address, and an identity may be reused after an object is gone.
+
+## 3. What are Python's built-in data type categories?
+
+- Numeric: `int`, `float`, `complex`
+- Boolean: `bool`
+- Text: `str`
+- Sequences: `list`, `tuple`, `range`
+- Sets: `set`, `frozenset`
+- Mapping: `dict`
+- Binary: `bytes`, `bytearray`, `memoryview`
+- Null value: `None`, whose type is `NoneType`
+
+## 4. What are the numeric types?
+
+`int` represents integers, `float` represents floating-point numbers, and `complex` represents complex numbers.
+
+```python
+age = 25
+count = -10
+price = 99.5
+percentage = 85.75
+z = 3 + 4j
+```
+
+## 5. What is a Boolean, and what does `bool()` do?
+
+The Boolean values are `True` and `False` (capitalized). `bool(value)` tests whether a value is truthy. Zero and empty collections are falsey; non-zero numbers and non-empty strings are truthy.
+
+```python
+is_active = True
+is_logged_in = False
+
+print(bool(0))        # False
+print(bool(5))        # True
+print(bool(""))       # False
+print(bool("hello"))  # True
+```
+
+## 6. What is a string?
+
+A string (`str`) is an immutable sequence of text. Indexing starts at zero.
+
+```python
+name = "Python"
+print(name[0])  # P
+print(name[1])  # y
+```
+
+An existing string cannot be changed in place; string operations create another string.
+
+## 7. What is a list?
+
+A list is ordered and mutable. It allows duplicate values and can contain values of different types.
+
+```python
+numbers = [10, 20, 30]
+data = [10, "Python", 20.25, True]
+```
+
+## 8. What is a tuple?
+
+A tuple is an ordered, immutable sequence that can contain duplicate values.
+
+```python
+point = (10, 20)
+```
+
+The tuple's items cannot be reassigned. A mutable object stored inside a tuple can still be changed.
+
+## 9. What is a set?
+
+A set is a mutable collection of unique, hashable elements. It does not support positional indexing like a list. `frozenset` is the immutable set type.
+
+```python
+numbers = {10, 20, 30}
+```
+
+## 10. What is a dictionary?
+
+A dictionary (`dict`) stores key-value pairs. Keys must be hashable; values can be of any type.
+
+```python
+student = {
+	"id": 101,
+	"name": "Vandana",
+	"marks": 85,
+}
+```
+
+## 11. What does `None` mean?
+
+`None` represents the absence of a value. It is not the same as `0`, `False`, an empty string, or an empty list.
+
+```python
+result = None
+if result is None:
+	print("No result yet")
+```
+
+Use `is None` to check for `None`.
+
+## 12. What is the difference between mutable and immutable objects?
+
+An immutable object cannot be changed after creation. Examples include `int`, `float`, `bool`, `str`, and `frozenset`. A tuple's contents cannot be reassigned, though it may contain mutable objects.
+
+A mutable object can be changed after creation. Examples include `list`, `dict`, `set`, and `bytearray`.
+
+## 13. Does assigning a new value change the original object?
+
+No. Integers are immutable. Reassigning `x` binds the name to a different integer object; it does not modify `10`.
+
+```python
+x = 10
+x = 20
+```
+
+## 14. What happens when one name is assigned to another?
+
+Both names refer to the same object; assignment does not make a copy. With immutable integers, rebinding one name does not affect the other:
+
+```python
+a = 10
+b = a
+a = 20
+
+print(a)  # 20
+print(b)  # 10
+```
+
+`b` still refers to the integer `10`.
+
+## 15. Why can changing a list through one name affect another name?
+
+Both names can refer to the same mutable list. A change made through either name changes that shared list.
+
+```python
+a = [10, 20]
+b = a
+b.append(30)
+
+print(a)  # [10, 20, 30]
+```
+
+## 16. What is the difference between `==` and `is`?
+
+`==` compares values. `is` tests whether two names refer to the same object.
+
+```python
+a = [1, 2]
+b = [1, 2]
+
+print(a == b)  # True: equal contents
+print(a is b)  # False: distinct list objects
+```
+
+Use `is` for identity checks such as `value is None`; use `==` for ordinary value comparisons.
+
+## 17. Where does Python use memory?
+
+Python uses memory for objects such as integers, strings, lists, dictionaries, and functions, along with the runtime structures needed to execute the program. Python manages object memory automatically. The exact allocation details depend on the Python implementation and its optimizations.
+
+## 18. What is reference counting in CPython?
+
+CPython tracks references to objects. Assigning another name to an object adds a reference; deleting a name removes that reference.
+
+```python
+a = [1, 2, 3]
+b = a       # Both names refer to the list.
+del b        # a still refers to it.
+```
+
+When a non-cyclic object's reference count reaches zero, CPython generally reclaims it promptly. This timing is not guaranteed across all Python implementations.
+
+## 19. What is garbage collection?
+
+Garbage collection is the process of identifying objects that are no longer reachable and reclaiming them. Python manages memory automatically, so programs normally do not manually call `free()` to release objects.
+
+## 20. Why does Python use both reference counting and a garbage collector?
+
+In CPython, reference counting handles many objects as their references are removed. But reference counting alone cannot reclaim an unreachable cycle of objects that refer to one another. The cyclic garbage collector can find and reclaim such cycles.
+
+```python
+items = []
+items.append(items)  # The list refers to itself.
+del items            # The name is removed; the unreachable cycle can be collected.
+```
+
+## 21. Does `del` necessarily delete an object immediately?
+
+No. `del` removes a name binding; it does not directly destroy the object. If another name still refers to it, the object remains reachable.
+
+```python
+numbers = [1, 2, 3]
+other_name = numbers
+del numbers
+
+print(other_name)  # [1, 2, 3]
+```
+
+## 22. When can an object become garbage?
+
+An object becomes eligible for reclamation when it is no longer reachable through the program's live names, containers, active calls, or other references.
+
+```python
+numbers = [1, 2, 3]
+other_name = numbers
+del numbers       # Still reachable through other_name.
+del other_name    # No references from these names remain.
+```
+
+An unreachable object is eligible for reclamation; the exact time reclamation occurs depends on the Python implementation and object. Cycles may be handled later by the cyclic garbage collector.
+
+## 23. If Python has garbage collection, why doesn't `del numbers` always destroy the object immediately?
+
+Because `del numbers` removes only the name `numbers`. Other references may keep the object reachable. If no references remain, CPython usually reclaims a non-cyclic object promptly through reference counting, while unreachable cycles may wait for the cyclic garbage collector. Also, reclaimed memory may be retained by Python for reuse instead of immediately being returned to the operating system.
+
+## Summary
+
+```text
+name -> object (identity, type, value)
+				 |
+				 v
+	   no longer reachable -> eligible for reclamation
+```
+
+Names refer to objects; assignment can create another reference rather than a copy. Mutability describes whether an object can change, not whether a name can be reassigned. `del` removes a reference, and Python controls when unreachable objects are reclaimed and when memory is reused or returned to the operating system.
